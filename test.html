@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text-to-Speech Extension Test Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .test-content {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        .instructions {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid #2196f3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Text-to-Speech Extension Test Page</h1>
+    
+    <div class="instructions">
+        <h3>How to Test the Extension:</h3>
+        <ol>
+            <li>Make sure the Text-to-Speech Reader extension is installed</li>
+            <li>Click the extension icon in your Chrome toolbar</li>
+            <li>Configure your voice settings</li>
+            <li>Click "Start Reading" to test the functionality</li>
+            <li>Try the floating controls by clicking "Show Floating Controls"</li>
+        </ol>
+    </div>
+
+    <div class="test-content">
+        <h2>Sample Content for Testing</h2>
+        
+        <p>This is a test page to verify that the Text-to-Speech Reader Chrome extension is working correctly. The extension should be able to read this content aloud when activated.</p>
+        
+        <p>The extension uses the Web Speech API to convert text to speech. It intelligently extracts the main content from web pages while excluding navigation elements, advertisements, and other non-content areas.</p>
+        
+        <h3>Features to Test:</h3>
+        <ul>
+            <li>Voice selection from available system voices</li>
+            <li>Speed adjustment (0.5x to 2x)</li>
+            <li>Pitch adjustment (0.5 to 2)</li>
+            <li>Volume control (0 to 1)</li>
+            <li>Floating controls that can be moved around the screen</li>
+            <li>Progress tracking through the content</li>
+            <li>Navigation between text chunks</li>
+        </ul>
+        
+        <p>The extension should automatically detect this main content area and read it aloud. The floating controls provide additional functionality like play/pause, stop, and navigation between different sections of the text.</p>
+        
+        <h3>Technical Details:</h3>
+        <p>This extension is built using Manifest V3 and includes:</p>
+        <ul>
+            <li>A popup interface for configuration</li>
+            <li>A content script that runs on web pages</li>
+            <li>A background service worker for extension management</li>
+            <li>Floating controls that can be dragged around the page</li>
+            <li>Settings persistence using Chrome's storage API</li>
+        </ul>
+        
+        <p>If everything is working correctly, you should hear this content being read aloud when you activate the extension. The voice should be clear and the reading should be smooth and natural.</p>
+    </div>
+    
+    <div class="test-content">
+        <h2>Additional Test Content</h2>
+        <p>This is additional content to test the chunking functionality. The extension splits long content into manageable chunks for better control and navigation.</p>
+        <p>You should be able to navigate between different chunks using the floating controls. The progress bar should show your current position in the content.</p>
+    </div>
+</body>
+</html> 
