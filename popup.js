@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const showFloatingControlsBtn = document.getElementById('show-floating-controls');
     const hideFloatingControlsBtn = document.getElementById('hide-floating-controls');
     const statusText = document.getElementById('status-text');
+    const statusContainer = document.getElementById('status-container');
+    const clearStatusBtn = document.getElementById('clear-status');
 
     let voices = [];
     let isReading = false;
@@ -101,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sendMessageToContentScript('startReading', { settings });
         isReading = true;
         updateButtonStates();
-        statusText.textContent = 'Reading page content...';
+        addStatusMessage('Reading page content...');
     }
 
     // Stop reading
@@ -109,7 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sendMessageToContentScript('stopReading');
         isReading = false;
         updateButtonStates();
-        statusText.textContent = 'Reading stopped';
+        addStatusMessage('Reading stopped');
     }
 
     // Show floating controls
@@ -117,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sendMessageToContentScript('showFloatingControls');
         floatingControlsVisible = true;
         updateButtonStates();
-        statusText.textContent = 'Floating controls shown';
+        addStatusMessage('Floating controls shown');
     }
 
     // Hide floating controls
@@ -125,7 +127,28 @@ document.addEventListener('DOMContentLoaded', function() {
         sendMessageToContentScript('hideFloatingControls');
         floatingControlsVisible = false;
         updateButtonStates();
-        statusText.textContent = 'Floating controls hidden';
+        addStatusMessage('Floating controls hidden');
+    }
+
+    // Add status message to history
+    function addStatusMessage(message) {
+        const timestamp = new Date().toLocaleTimeString();
+        const statusElement = document.createElement('p');
+        statusElement.className = 'status-message';
+        statusElement.innerHTML = `<span class="status-time">[${timestamp}]</span> ${message}`;
+        statusContainer.appendChild(statusElement);
+        
+        // Scroll to bottom to show latest message
+        statusContainer.scrollTop = statusContainer.scrollHeight;
+        
+        // Update the main status text with the latest message
+        statusText.textContent = message;
+    }
+
+    // Clear status history
+    function clearStatusHistory() {
+        statusContainer.innerHTML = '<p id="status-text">Status history cleared</p>';
+        statusText.textContent = 'Status history cleared';
     }
 
     // Update button states
@@ -178,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (status) {
                 isReading = status.isReading;
                 updateButtonStates();
-                statusText.textContent = status.status;
+                addStatusMessage(status.status);
             }
         }
     });
