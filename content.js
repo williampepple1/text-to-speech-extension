@@ -1,3 +1,9 @@
+// Prevent multiple initializations
+if (window.ttsReaderInitialized) {
+    console.log('Text-to-Speech Reader already initialized');
+} else {
+    window.ttsReaderInitialized = true;
+
 class TextToSpeechReader {
     constructor() {
         this.synthesis = window.speechSynthesis;
@@ -25,20 +31,24 @@ class TextToSpeechReader {
 
     setupMessageListener() {
         chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-            switch (message.action) {
-                case 'startReading':
-                    this.settings = { ...this.settings, ...message.settings };
-                    this.startReading();
-                    break;
-                case 'stopReading':
-                    this.stopReading();
-                    break;
-                case 'showFloatingControls':
-                    this.showFloatingControls();
-                    break;
-                case 'hideFloatingControls':
-                    this.hideFloatingControls();
-                    break;
+            try {
+                switch (message.action) {
+                    case 'startReading':
+                        this.settings = { ...this.settings, ...message.settings };
+                        this.startReading();
+                        break;
+                    case 'stopReading':
+                        this.stopReading();
+                        break;
+                    case 'showFloatingControls':
+                        this.showFloatingControls();
+                        break;
+                    case 'hideFloatingControls':
+                        this.hideFloatingControls();
+                        break;
+                }
+            } catch (error) {
+                console.error('Error handling message in TTS Reader:', error);
             }
         });
     }
@@ -353,4 +363,10 @@ class TextToSpeechReader {
 }
 
 // Initialize the text-to-speech reader
-const ttsReader = new TextToSpeechReader(); 
+try {
+    const ttsReader = new TextToSpeechReader();
+    console.log('Text-to-Speech Reader initialized successfully');
+} catch (error) {
+    console.error('Error initializing Text-to-Speech Reader:', error);
+}
+} 
