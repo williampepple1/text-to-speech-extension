@@ -156,12 +156,30 @@ document.addEventListener('DOMContentLoaded', function() {
     showFloatingControlsBtn.addEventListener('click', showFloatingControls);
     hideFloatingControlsBtn.addEventListener('click', hideFloatingControls);
 
-    // Listen for messages from content script
-    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-        if (message.action === 'readingStatus') {
-            isReading = message.isReading;
-            updateButtonStates();
-            statusText.textContent = message.status;
+    // Check reading status from storage
+    function checkReadingStatus() {
+        chrome.storage.local.get(['readingStatus'], (result) => {
+            if (result.readingStatus) {
+                const status = result.readingStatus;
+                // Only update if the status is recent (within last 5 seconds)
+                if (Date.now() - status.timestamp < 5000) {
+                    isReading = status.isReading;
+                    updateButtonStates();
+                    statusText.textContent = status.status;
+                }
+            }
+        });
+    }
+
+    // Listen for storage changes
+    chrome.storage.onChanged.addListener((changes, namespace) => {
+        if (namespace === 'local' && changes.readingStatus) {
+            const status = changes.readingStatus.newValue;
+            if (status) {
+                isReading = status.isReading;
+                updateButtonStates();
+                statusText.textContent = status.status;
+            }
         }
     });
 
@@ -170,5 +188,6 @@ document.addEventListener('DOMContentLoaded', function() {
         loadSettings();
         updateSliderValues();
         updateButtonStates();
+        checkReadingStatus(); // Check initial status
     });
 }); 

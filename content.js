@@ -354,11 +354,15 @@ class TextToSpeechReader {
     }
 
     notifyStatus(status) {
-        chrome.runtime.sendMessage({
-            action: 'readingStatus',
-            isReading: this.isReading,
-            status: status
-        });
+        try {
+            chrome.runtime.sendMessage({
+                action: 'readingStatus',
+                isReading: this.isReading,
+                status: status
+            });
+        } catch (error) {
+            console.error('Error sending status message:', error);
+        }
     }
 }
 

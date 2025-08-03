@@ -26,8 +26,14 @@ chrome.runtime.onStartup.addListener(() => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     switch (message.action) {
         case 'readingStatus':
-            // Forward reading status to popup if it's open
-            chrome.runtime.sendMessage(message);
+            // Store reading status for popup to access
+            chrome.storage.local.set({ 
+                readingStatus: {
+                    isReading: message.isReading,
+                    status: message.status,
+                    timestamp: Date.now()
+                }
+            });
             break;
             
         case 'getTabInfo':
